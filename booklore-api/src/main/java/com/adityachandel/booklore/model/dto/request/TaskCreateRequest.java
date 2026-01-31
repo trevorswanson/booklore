@@ -2,6 +2,7 @@ package com.adityachandel.booklore.model.dto.request;
 
 import com.adityachandel.booklore.model.enums.TaskType;
 import com.adityachandel.booklore.task.options.LibraryRescanOptions;
+import com.adityachandel.booklore.task.options.RecalculateBookFileHashesOptions;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ public class TaskCreateRequest {
     @JsonSubTypes({
             @JsonSubTypes.Type(value = LibraryRescanOptions.class, name = "REFRESH_LIBRARY_METADATA"),
             @JsonSubTypes.Type(value = MetadataRefreshRequest.class, name = "REFRESH_METADATA_MANUAL"),
+            @JsonSubTypes.Type(value = RecalculateBookFileHashesOptions.class, name = "RECALCULATE_BOOK_FILE_HASHES"),
     })
     private Object options;
 

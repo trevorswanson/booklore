@@ -5,12 +5,13 @@ import {ProgressBar} from 'primeng/progressbar';
 import {MessageService} from 'primeng/api';
 import {Select} from 'primeng/select';
 import {FormsModule} from '@angular/forms';
-import {LibraryRescanOptions, MetadataReplaceMode, TASK_TYPE_CONFIG, TaskCreateRequest, TaskCronConfigRequest, TaskHistory, TaskInfo, TaskProgressPayload, TaskService, TaskStatus, TaskType} from './task.service';
+import {LibraryRescanOptions, MetadataReplaceMode, RecalculateBookFileHashesOptions, TASK_TYPE_CONFIG, TaskCreateRequest, TaskCronConfigRequest, TaskHistory, TaskInfo, TaskProgressPayload, TaskService, TaskStatus, TaskType} from './task.service';
 import {MetadataRefreshRequest} from '../../metadata/model/request/metadata-refresh-request.model';
 import {finalize, forkJoin, Subscription} from 'rxjs';
 import {ExternalDocLinkComponent} from '../../../shared/components/external-doc-link/external-doc-link.component';
 import {ToggleSwitch} from 'primeng/toggleswitch';
 import {Tooltip} from 'primeng/tooltip';
+import {CheckboxModule} from 'primeng/checkbox';
 
 @Component({
   selector: 'app-task-management',
@@ -23,7 +24,8 @@ import {Tooltip} from 'primeng/tooltip';
     FormsModule,
     ExternalDocLinkComponent,
     ToggleSwitch,
-    Tooltip
+    Tooltip,
+    CheckboxModule
   ],
   templateUrl: './task-management.component.html',
   styleUrl: './task-management.component.scss'
@@ -52,6 +54,7 @@ export class TaskManagementComponent implements OnInit, OnDestroy {
     }
   ];
   selectedMetadataReplaceMode: MetadataReplaceMode = MetadataReplaceMode.REPLACE_MISSING;
+  recalculateHashesDryRun = true;
 
   // Cron Editing State
   cronUpdating = false;
@@ -170,10 +173,16 @@ export class TaskManagementComponent implements OnInit, OnDestroy {
       };
     }
 
+    if (type === TaskType.RECALCULATE_BOOK_FILE_HASHES) {
+      options = {
+        dryRun: this.recalculateHashesDryRun
+      };
+    }
+
     this.runTaskWithOptions(type, options);
   }
 
-  private runTaskWithOptions(type: string, options: LibraryRescanOptions | MetadataRefreshRequest | null): void {
+  private runTaskWithOptions(type: string, options: LibraryRescanOptions | MetadataRefreshRequest | RecalculateBookFileHashesOptions | null): void {
     const request: TaskCreateRequest = {
       taskType: type as TaskType,
       options: options
@@ -448,6 +457,7 @@ export class TaskManagementComponent implements OnInit, OnDestroy {
     const icons: Record<string, string> = {
       [TaskType.CLEAR_PDF_CACHE]: 'pi-database',
       [TaskType.REFRESH_LIBRARY_METADATA]: 'pi-refresh',
+      [TaskType.RECALCULATE_BOOK_FILE_HASHES]: 'pi-hashtag',
       [TaskType.UPDATE_BOOK_RECOMMENDATIONS]: 'pi-sparkles',
       [TaskType.CLEANUP_DELETED_BOOKS]: 'pi-trash',
       [TaskType.SYNC_LIBRARY_FILES]: 'pi-sync',

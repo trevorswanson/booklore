@@ -183,6 +183,14 @@
                 </div>
               }
 
+              @if (!isTaskRunning(taskInfo.taskType) && taskInfo.taskType === TaskType.RECALCULATE_BOOK_FILE_HASHES) {
+                <div class="task-options">
+                  <label class="option-label">Dry run:</label>
+                  <p-checkbox [(ngModel)]="recalculateHashesDryRun" [binary]="true"></p-checkbox>
+                  <span class="option-hint">Only report mismatched hashes without updating the database.</span>
+                </div>
+              }
+
               @if (isTaskRunning(taskInfo.taskType)) {
                 <div class="task-progress">
                   @if (isTaskStale(getTaskHistory(taskInfo.taskType))) {

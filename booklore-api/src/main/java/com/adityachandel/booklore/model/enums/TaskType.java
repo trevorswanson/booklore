@@ -11,6 +11,14 @@ public enum TaskType {
             "Refresh Metadata",
             "Re-reads book information (title, author, cover, etc.) from your files and updates the Booklore database."
     ),
+    RECALCULATE_BOOK_FILE_HASHES(
+            false,
+            true,
+            false,
+            false,
+            "Recalculate Book File Hashes",
+            "Recomputes stored file hashes for all book files to repair syncing issues caused by stale hashes."
+    ),
     UPDATE_BOOK_RECOMMENDATIONS(
             false,
             true,
